@@ -1,0 +1,10 @@
+feedparser
+newspaper3k
+youtube-transcript-api
+pyyaml
+requests
+beautifulsoup4
+markdownify
+python-dotenv
+ollama
+lxml_html_clean
