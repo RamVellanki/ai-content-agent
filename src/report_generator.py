@@ -9,6 +9,6 @@ def generate_report(summaries):
         f.write(f"# Daily Digest - {today}\n\n")
         for summary in summaries:
             f.write(f"## [{summary['title']}]({summary['link']})\n")
-            f.write(f"*Topic: {summary['topic']}*\n\n")
+            f.write(f"*Topic: {summary['topic']} | Category: {summary['category']}*\n\n")
             f.write(f"{summary['summary']}\n\n")
     print(f"Digest created: {output_path}")

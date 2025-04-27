@@ -6,5 +6,8 @@ requests
 beautifulsoup4
 markdownify
 python-dotenv
-ollama
 lxml_html_clean
+langchain
+langchain-community
+ollama
+pydantic
