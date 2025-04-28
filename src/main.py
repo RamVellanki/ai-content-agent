@@ -1,6 +1,6 @@
 from config_loader import load_topics
 from feed_discoverer import get_latest_articles
-from content_fetcher import fetch_article_content, fetch_youtube_transcript
+from tools.content_fetcher import fetch_article_content, fetch_youtube_transcript
 from summarizer import short_summary_chain, detailed_summary_chain, classify_article_chain
 from report_generator import generate_report
 

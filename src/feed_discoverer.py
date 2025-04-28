@@ -1,7 +1,8 @@
 FEEDS = {
     "AI": [
         "https://www.aisafetynews.com/rss",
-        "https://openai.com/blog/rss.xml"
+        "https://openai.com/blog/rss.xml",
+        "https://news.ycombinator.com/rss"
     ],
     "SaaS": [
         "https://www.saastr.com/feed/",

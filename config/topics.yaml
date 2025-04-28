@@ -1,5 +1,9 @@
 topics:
-  - Artificial Intelligence
-  - SaaS Growth
-  - Indie Hacking
-  - Engineering Leadership
+  - name: AI Agents
+    keywords: ["ai agents", "autonomous ai", "agentic workflows", "openai auto agents"]
+
+  - name: SaaS Growth
+    keywords: ["saas scaling", "bootstrapped startups", "product led growth"]
+
+  - name: Indie Hacking
+    keywords: ["indie hackers", "solo founders", "indie startup growth"]
