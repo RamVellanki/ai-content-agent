@@ -1,0 +1,60 @@
+name: Deploy to GitHub Pages
+
+on:
+  workflow_dispatch: # Allows manual trigger
+  push:
+    branches:
+      - main
+    paths:
+      - 'outputs/digest-*.md'
+  workflow_run:
+    workflows: ["Run AI Digest Agent Daily"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Copy to GitHub Pages branch
+      run: |
+        mkdir -p publish
+        # Find all digest files
+        DIGEST_FILES=$(ls outputs/digest-*.md | sort)
+
+        # Find latest file
+        LATEST_FILE=$(echo "$DIGEST_FILES" | tail -n 1)
+        LATEST_BASENAME=$(basename "$LATEST_FILE")
+
+        # Create index.md
+        echo "# 📰 AI Digest Portal" > publish/index.md
+        echo "" >> publish/index.md
+        echo "## 📅 Archive" >> publish/index.md
+
+        for f in $DIGEST_FILES; do
+          fname=$(basename "$f")
+          echo "- [${fname%.md}]($fname)" >> publish/index.md
+        done
+
+        echo "" >> publish/index.md
+        echo "---" >> publish/index.md
+        echo "## 🧠 Latest Digest" >> publish/index.md
+        echo "" >> publish/index.md
+        cat "$LATEST_FILE" >> publish/index.md
+
+        # Copy digest files to publish dir
+        cp outputs/digest-*.md publish/
+
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: publish 
