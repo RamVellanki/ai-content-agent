@@ -42,3 +42,16 @@ jobs:
         git commit -m "Daily Digest Update - $(date)" || echo "No changes to commit"
         git push
       continue-on-error: true
+      
+    - name: Copy to GitHub Pages branch
+      run: |
+        mkdir -p publish
+        cp outputs/*.md publish/index.md
+        echo "<meta http-equiv='refresh' content='0; url=index.md'>" > publish/index.html
+
+    - name: Deploy to gh-pages
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_branch: gh-pages
+        publish_dir: publish
