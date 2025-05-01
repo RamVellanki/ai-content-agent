@@ -3,12 +3,6 @@ layout: default
 title: AI Digest Portal
 ---
 
-# 📰 AI Digest Portal
-
-## 📅 Archive
-- [digest-2025-04-27](digest-2025-04-27.md)
-- [digest-2025-04-28](digest-2025-04-28.md)
-- [digest-2025-05-01](digest-2025-05-01.md)
 
 ---
 ## 🧠 Latest Digest
