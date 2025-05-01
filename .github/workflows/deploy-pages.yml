@@ -1,7 +1,13 @@
 name: Deploy to GitHub Pages
 
 on:
-  workflow_dispatch: # Allows manual trigger
+  workflow_dispatch:
+    inputs:
+      force_deploy:
+        description: 'Force deploy even if no changes detected'
+        required: false
+        type: boolean
+        default: false
   push:
     branches:
       - main
@@ -15,15 +21,26 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' || github.event_name == 'push' }}
 
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
+        fetch-depth: 0
+
+    - name: Check for changes
+      id: check_changes
+      run: |
+        if [ -d "outputs" ] && [ "$(ls -A outputs/digest-*.md 2>/dev/null)" ]; then
+          echo "changes=true" >> $GITHUB_OUTPUT
+        else
+          echo "changes=false" >> $GITHUB_OUTPUT
+        fi
 
     - name: Copy to GitHub Pages branch
+      if: ${{ steps.check_changes.outputs.changes == 'true' || inputs.force_deploy == true }}
       run: |
         mkdir -p publish
         # Find all digest files
@@ -53,8 +70,13 @@ jobs:
         cp outputs/digest-*.md publish/
 
     - name: Deploy to gh-pages
+      if: ${{ steps.check_changes.outputs.changes == 'true' || inputs.force_deploy == true }}
       uses: peaceiris/actions-gh-pages@v4
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
-        publish_dir: publish 
+        publish_dir: publish
+
+    - name: Skip deployment
+      if: ${{ steps.check_changes.outputs.changes == 'false' && inputs.force_deploy == false }}
+      run: echo "No digest files found to deploy. Skipping deployment." 
