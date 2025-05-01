@@ -28,6 +28,7 @@ jobs:
         SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         RUN_ENV: cloud
+        PYTHONPATH: ${{ github.workspace }}
       run: |
         python orchestrator/run_pipeline.py
 
