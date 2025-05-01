@@ -1,3 +1,8 @@
+---
+layout: default
+title: AI Digest Portal
+---
+
 # 📰 AI Digest Portal
 
 ## 📅 Archive
