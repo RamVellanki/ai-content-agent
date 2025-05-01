@@ -92,6 +92,7 @@ jobs:
           echo "" >> "publish/$fname"
           cat "$f" >> "publish/$fname"
         done
+        rm -f publish/.nojekyll
 
     - name: Deploy to gh-pages
       if: ${{ steps.check_changes.outputs.changes == 'true' || inputs.force_deploy == true }}
