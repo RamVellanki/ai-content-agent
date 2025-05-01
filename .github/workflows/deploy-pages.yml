@@ -101,6 +101,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_branch: gh-pages
         publish_dir: publish
+        enable_jekyll: true
 
     - name: Skip deployment
       if: ${{ steps.check_changes.outputs.changes == 'false' && inputs.force_deploy == false }}
