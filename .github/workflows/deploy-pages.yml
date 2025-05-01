@@ -53,6 +53,12 @@ jobs:
         LATEST_FILE=$(echo "$DIGEST_FILES" | tail -n 1)
         LATEST_BASENAME=$(basename "$LATEST_FILE")
 
+        # Write _config.yml to enable Jekyll and styling
+        echo "title: AI Digest" > publish/_config.yml
+        echo "theme: minima" >> publish/_config.yml
+        echo "markdown: kramdown" >> publish/_config.yml
+        echo "description: ''" >> publish/_config.yml
+
         # Generate index.md with frontmatter and sidebar
         echo "---" > publish/index.md
         echo "layout: default" >> publish/index.md
