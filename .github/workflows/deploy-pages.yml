@@ -43,15 +43,24 @@ jobs:
       if: ${{ steps.check_changes.outputs.changes == 'true' || inputs.force_deploy == true }}
       run: |
         mkdir -p publish
-        # Find all digest files
+        # Remove any old .nojekyll if it exists
+        rm -f publish/.nojekyll
+
+        # Collect all digest files
         DIGEST_FILES=$(ls outputs/digest-*.md | sort)
 
-        # Find latest file
+        # Find latest digest
         LATEST_FILE=$(echo "$DIGEST_FILES" | tail -n 1)
         LATEST_BASENAME=$(basename "$LATEST_FILE")
 
-        # Create index.md
-        echo "# 📰 AI Digest Portal" > publish/index.md
+        # Generate index.md with frontmatter and sidebar
+        echo "---" > publish/index.md
+        echo "layout: default" >> publish/index.md
+        echo "title: AI Digest Portal" >> publish/index.md
+        echo "---" >> publish/index.md
+        echo "" >> publish/index.md
+
+        echo "# 📰 AI Digest Portal" >> publish/index.md
         echo "" >> publish/index.md
         echo "## 📅 Archive" >> publish/index.md
 
@@ -66,8 +75,17 @@ jobs:
         echo "" >> publish/index.md
         cat "$LATEST_FILE" >> publish/index.md
 
-        # Copy digest files to publish dir
-        cp outputs/digest-*.md publish/
+        # Copy and add frontmatter to each digest file
+        for f in $DIGEST_FILES; do
+          fname=$(basename "$f")
+          date_title=$(echo "$fname" | sed 's/digest-//' | sed 's/.md//')
+          echo "---" > "publish/$fname"
+          echo "layout: default" >> "publish/$fname"
+          echo "title: AI Digest - $date_title" >> "publish/$fname"
+          echo "---" >> "publish/$fname"
+          echo "" >> "publish/$fname"
+          cat "$f" >> "publish/$fname"
+        done
 
     - name: Deploy to gh-pages
       if: ${{ steps.check_changes.outputs.changes == 'true' || inputs.force_deploy == true }}
