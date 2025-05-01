@@ -66,15 +66,6 @@ jobs:
         echo "---" >> publish/index.md
         echo "" >> publish/index.md
 
-        echo "# 📰 AI Digest Portal" >> publish/index.md
-        echo "" >> publish/index.md
-        echo "## 📅 Archive" >> publish/index.md
-
-        for f in $DIGEST_FILES; do
-          fname=$(basename "$f")
-          echo "- [${fname%.md}]($fname)" >> publish/index.md
-        done
-
         echo "" >> publish/index.md
         echo "---" >> publish/index.md
         echo "## 🧠 Latest Digest" >> publish/index.md
